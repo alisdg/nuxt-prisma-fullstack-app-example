@@ -1,0 +1,10 @@
+html {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+body {
+    min-width: 600px;
+    @apply bg-gray-200
+}
