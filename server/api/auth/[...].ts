@@ -4,13 +4,14 @@ import {PrismaClient} from '@prisma/client'
 // @ts-ignore
 import bcrypt from "bcrypt";
 
-const prisma = new PrismaClient({
-  rejectOnNotFound: true,
-});
+const prisma = new PrismaClient();
 
 export default NuxtAuthHandler({
-  // TODO: SET A STRONG SECRET, SEE https://sidebase.io/nuxt-auth/configuration/nuxt-auth-handler#secret
-  secret: process.env.AUTH_SECRET,
+  callbacks: {
+  },
+  pages: {
+    signIn: '/login'
+  },
   // TODO: ADD YOUR OWN AUTHENTICATION PROVIDER HERE, READ THE DOCS FOR MORE: https://sidebase.io/nuxt-auth
   providers: [
     // @ts-expect-error You need to use .default here for it to work during SSR. May be fixed via Vite at some point
@@ -21,25 +22,21 @@ export default NuxtAuthHandler({
       // You can specify whatever fields you are expecting to be submitted.
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
+      credentials: {},
       async authorize(credentials: any) {
-        console.warn('ATTENTION: You should replace this with your real providers or credential provider logic! The current setup is not safe')
+
         // You need to provide your own logic here that takes the credentials
         // submitted and returns either a object representing a user or value
         // that is false/null if the credentials are invalid.
-        // NOTE: THE BELOW LOGIC IS NOT SAFE OR PROPER FOR AUTHENTICATION!
-
-        const user = await prisma.users.findUnique({where: {username: credentials?.username}})
-
-        if (credentials?.username === user.username && bcrypt.compare(credentials?.password, user.password)) {
-          // Any object returned will be saved in `user` property of the JWT
-          return user
-        } else {
-          console.error('Warning: Malicious login attempt registered, bad credentials provided')
-
-          // If you return null then an error will be displayed advising the user to check their details.
-          return null
-
-          // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
+        try {
+          const user = await prisma.users.findUniqueOrThrow({where: {username: credentials?.username}})
+          if (credentials?.username === user.username && bcrypt.compare(credentials?.password, user.password)) {
+            return user
+          } else {
+            throw Error('password is wrong')
+          }
+        } catch (e) {
+          throw Error('User not found')
         }
       }
     })

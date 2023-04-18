@@ -40,13 +40,14 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, ref} from 'vue'
+import  {defineComponent, ref} from 'vue'
 import {
   FormInst,
   FormValidationError,
   useMessage,
   FormRules
 } from 'naive-ui'
+import {definePageMeta} from "#imports";
 
 interface ModelType {
   name: string | null
@@ -55,13 +56,13 @@ interface ModelType {
 }
 
 export default defineComponent({
-  meta:{
-    auth: {
-      unauthenticatedOnly: true,
-      navigateAuthenticatedTo: '/',
-    }
-  },
   setup() {
+    definePageMeta({
+      auth: {
+        unauthenticatedOnly: true,
+        navigateAuthenticatedTo: '/',
+      }
+    })
     const formRef = ref<FormInst | null>(null)
     const message = useMessage()
     const modelRef = ref<ModelType>({

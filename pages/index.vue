@@ -100,7 +100,7 @@
 
 <script setup>
  definePageMeta({
-   auth: true
+   auth: true,
  })
 </script>
 
