@@ -8,7 +8,7 @@
         <n-input
             v-model:value="model.password"
             type="password"
-            @keydown.enter.prevent
+            @keydown.enter="handleValidateButtonClick"
         />
       </n-form-item>
       <n-row :gutter="[0, 24]">
@@ -73,8 +73,10 @@ function handleValidateButtonClick (e: MouseEvent) {
           const {error, url} = await signIn('credentials', { username: model.value.username, password: model.value.password, redirect: false })
           if (error){
             message.error(error)
+          }else {
+            const {callbackUrl} = useRoute().query
+            navigateTo(callbackUrl, { external: true })
           }
-
         }
       }
   )

@@ -8,6 +8,25 @@ const prisma = new PrismaClient();
 
 export default NuxtAuthHandler({
   callbacks: {
+    jwt: ({ token, account, user }) => {
+      if (account && user) {
+        token.accessToken = account.access_token
+        const {password, ...rest} =  user
+        token.user = rest
+      }
+
+      return token
+    },
+
+    // Session retuned by useSession and getSession
+    session: ({ token, session}) => {
+      if (token) {
+        session.user = token.user
+        session.accessToken = token.accessToken
+      }
+
+      return session
+    },
   },
   pages: {
     signIn: '/login'
@@ -24,19 +43,19 @@ export default NuxtAuthHandler({
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {},
       async authorize(credentials: any) {
-
         // You need to provide your own logic here that takes the credentials
         // submitted and returns either a object representing a user or value
         // that is false/null if the credentials are invalid.
+        let user = null;
         try {
-          const user = await prisma.users.findUniqueOrThrow({where: {username: credentials?.username}})
-          if (credentials?.username === user.username && bcrypt.compare(credentials?.password, user.password)) {
-            return user
-          } else {
-            throw Error('password is wrong')
-          }
+          user = await prisma.users.findUniqueOrThrow({where: {username: credentials?.username}})
         } catch (e) {
           throw Error('User not found')
+        }
+        if (credentials?.username === user.username && await bcrypt.compare(credentials?.password, user.password)) {
+          return user;
+        } else {
+          throw Error('password is wrong')
         }
       }
     })
