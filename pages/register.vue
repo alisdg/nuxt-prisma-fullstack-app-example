@@ -58,6 +58,7 @@ interface ModelType {
 export default defineComponent({
   setup() {
     definePageMeta({
+      layout: 'auth',
       auth: {
         unauthenticatedOnly: true,
         navigateAuthenticatedTo: '/',

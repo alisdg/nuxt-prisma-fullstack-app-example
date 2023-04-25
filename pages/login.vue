@@ -14,7 +14,7 @@
       <n-row :gutter="[0, 24]">
         <n-col :span="24">
           <div style="display: flex; justify-content: space-between">
-            <div class="text-sm">Not registered ? <n-button text text-color="#17aafe">Create account now</n-button> </div>
+            <div class="text-sm">Not registered ? <n-button text> <nuxt-link to="/register">Create account now</nuxt-link></n-button> </div>
             <n-button
                 round
                 type="primary"
@@ -38,6 +38,7 @@ interface ModelType {
 import {FormInst, FormRules, FormValidationError} from "naive-ui";
 
 definePageMeta({
+  layout: 'auth',
   auth: {
     unauthenticatedOnly: true,
     navigateAuthenticatedTo: '/',

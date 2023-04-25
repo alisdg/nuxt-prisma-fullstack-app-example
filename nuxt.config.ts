@@ -5,7 +5,8 @@ export default defineNuxtConfig({
   modules: [
     '@sidebase/nuxt-auth',
     '@nuxtjs/tailwindcss',
-    '@huntersofbook/naive-ui-nuxt'
+    '@huntersofbook/naive-ui-nuxt',
+    ['unplugin-icons/nuxt', { autoInstall: true}]
   ],
 
   auth: {
@@ -33,8 +34,9 @@ export default defineNuxtConfig({
     config: {
       corePlugins: {
         preflight: false,
-      }
-    }
+      },
+      darkMode: 'class'
+    },
 
   }
 })
