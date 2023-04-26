@@ -22,3 +22,46 @@ model Users {
     created_at      DateTime    @default(now()) @db.DateTime(0)
     updated_at      DateTime?   @updatedAt
 }
+
+model Song {
+    id              Int             @id @default(autoincrement())
+    title           String          @default("untitled")
+    artists         SingerSongs[]
+    main_artist_id  Int
+    album           Album?          @relation(fields: [album_id], references: [id])
+    album_id        Int?
+    year            Int?           @db.Year
+}
+
+
+model Singer {
+    id          Int             @id @default(autoincrement())
+    name        String          @unique
+    songs       SingerSongs[]
+    birthday    DateTime?        @db.DateTime
+    albums      Album[]
+    gender      Gender?
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+model SingerSongs {
+  singer        Singer      @relation(fields: [singer_id], references: [id])
+  singer_id     Int
+  song          Song        @relation(fields: [song_id], references: [id])
+  song_id       Int
+  created_at    DateTime    @default(now()) @db.DateTime(0)
+  @@id([singer_id, song_id])
+}
+
+model Album {
+   id        Int     @id @default(autoincrement())
+   title     String
+   artist    Singer  @relation(fields: [artist_id], references: [id])
+   artist_id Int
+   songs     Song[]
+   year      Int?    @db.Year
+}

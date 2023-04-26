@@ -1,7 +1,6 @@
 <template>
   <header class="flex justify-between p-5">
     <span class="font-bold text-xl">SsOoNnGg</span>
-
       <n-space>
         <n-button text circle :type="theme === 'light' ? 'info' : 'warning'" @click="toggleTheme">
           <template #icon>

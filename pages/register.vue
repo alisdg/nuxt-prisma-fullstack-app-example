@@ -23,7 +23,8 @@
 
       <n-row :gutter="[0, 24]">
         <n-col :span="24">
-          <div style="display: flex; justify-content: flex-end">
+          <div class="flex justify-between">
+            <div class="text-sm">already have an account ? <n-button text> <nuxt-link to="/login">Sign in</nuxt-link></n-button> </div>
             <n-button
                 round
                 type="primary"

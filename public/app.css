@@ -1,3 +1,18 @@
-html {
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
 
+body {
+    @apply bg-gray-200;
+    color: #141414
+}
+
+html.dark body {
+    @apply bg-gray-700;
+    color: #fefefe
+}
+html.dark a {
+    color: violet;
 }
